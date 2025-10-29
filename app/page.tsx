@@ -25,7 +25,11 @@ export default function Home() {
         {todos.map((item,index)=>(
           <div className="flex">
             <p key={item.id}>{item.title}</p>
-            <button className="bg-lime-500 rounded-full p-2">Mark As Done</button>
+
+            <button className="bg-lime-500 rounded-full p-2" onClick={()=>{
+              setTodos(( prev )=> prev.map((a)=>( a.id===item.id ? {...a,done:true}:a
+              )))
+            }}>Mark As Done</button>
             <button className="bg-red-400 rounded-full p-2" onClick={()=>{
               setTodos(todos.filter(a=>a.id!==item.id))
             }}>Delete Todo</button>
