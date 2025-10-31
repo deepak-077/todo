@@ -5,8 +5,7 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client"
-  output   = "../src/generated"
+  provider = "prisma-client-js"
   
 }
 
@@ -15,8 +14,8 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Todo{
+model todo{
   id    Int @id @default(autoincrement())
-  title String
+  title String 
   done  Boolean @default(false)
 }

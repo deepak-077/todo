@@ -1,21 +1,49 @@
 "use client"
 
-import { useState } from "react";
+import { title } from "process";
+import { useEffect, useState } from "react";
+import axios from "axios";
 export default function Home() {
   
   // State variables
   const [newTodo,setNewTodo]=useState("")
+  const [todos,setTodos]=useState<{id:number; title:string; done:boolean}[]>([])
 
-  const [todos,setTodos]=useState([
-    {id:1,title:"wake up 4:30 am", done:true},
-    {id:2,title:"Go to gym", done:false},
-    {id:3,title:"Meditate", done:false},
-    {id:4,title:"Run 3kms", done:true},
-    {id:5,title:"Study 2 hours", done:true},
-
-  ])
-
+  // filter for completed todos
   const completed=todos.filter(a=>a.done===true);
+
+  useEffect(()=>{
+    fetchTodos()
+  },[])
+
+  async function fetchTodos(){
+    try{
+
+    }
+    catch(error){
+      console.log("failed to get todos")
+
+    }
+  }
+
+  
+
+  async function addTodo(){
+    if(!newTodo.trim()){
+      return
+    }
+    try{
+      await axios.post("localhost://3001/todos",{
+        title:newTodo,
+        done:false
+      })
+      setNewTodo("")
+      fetchTodos()
+    }
+    catch(error){
+      console.log("failed to add todo", error);
+    }
+  }
   
   return (
     <div className="bg-gray-700 h-screen text-white">
