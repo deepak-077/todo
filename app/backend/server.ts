@@ -1,11 +1,15 @@
 
 import { PrismaClient } from "@prisma/client";
 
-import express, { Request, Response } from "express";
+import express from "express";
+import type { Request, Response } from "express";
+import cors from "cors";
+
 
 const prisma= new PrismaClient
 
 const app=express()
+app.use(cors());
 app.use(express.json())
 
 app.get("/todos",async(req:Request,res:Response)=>{
@@ -22,7 +26,8 @@ app.get("/todos",async(req:Request,res:Response)=>{
 })
 
 app.post("/todos", async (req:Request,res:Response)=>{
-    const {id,title,done}=req.body;
+    const {title,done}=req.body;
+    console.log("Incoming data:", req.body);
     try{
         const todo=await prisma.todo.create({
             data: {
@@ -39,6 +44,7 @@ app.post("/todos", async (req:Request,res:Response)=>{
     }
     
 })
+
 
 
 app.listen(3001, ()=>{

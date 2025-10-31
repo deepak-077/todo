@@ -18,11 +18,22 @@ export default function Home() {
 
   async function fetchTodos(){
     try{
-
+      const response = await axios.get("http://localhost:3001/todos")
+      setTodos(response.data)
     }
     catch(error){
-      console.log("failed to get todos")
+      console.log("failed to get todos",error)
 
+    }
+  }
+
+  async function deleteTodos(id:number){
+    try{
+      await axios.delete(`http://localhost:3001/todos/${id}`)
+      fetchTodos()
+    }
+    catch(error){
+      console.log("deletion failed", error)
     }
   }
 
@@ -33,7 +44,7 @@ export default function Home() {
       return
     }
     try{
-      await axios.post("localhost://3001/todos",{
+      await axios.post("http://localhost:3001/todos",{
         title:newTodo,
         done:false
       })
@@ -81,12 +92,7 @@ export default function Home() {
           setNewTodo(e.target.value)
         }} />
 
-        <button onClick={()=>{
-          const task= { id:todos.length,title:newTodo,done:false }
-          setTodos((prev)=>[...prev,task])
-          setNewTodo("")
-
-        }}>Add Todo</button>
+        <button onClick={addTodo}>Add Todo</button>
       </div>
 
 
@@ -94,3 +100,5 @@ export default function Home() {
     </div>
   );
 }
+      
+
