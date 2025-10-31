@@ -45,6 +45,37 @@ app.post("/todos", async (req:Request,res:Response)=>{
     
 })
 
+app.delete("/todos/:id", async(req:Request,res:Response)=>{
+    const id=parseInt(req.params.id)
+    try{
+        const del=await prisma.todo.delete({
+            where:{ id }
+        })
+        res.json({msg:"todo deleted"})
+
+
+    }
+    catch(error){
+        console.log("deletion failed", error)
+        res.status(500).json({error:"failed to delete"})
+    }
+})
+
+app.patch("/todos/:id", async (req: Request, res: Response) => {
+  const id = parseInt(req.params.id);
+  const { done } = req.body;
+
+  try {
+    const updatedTodo = await prisma.todo.update({
+      where: { id },
+      data: { done },
+    });
+    res.json(updatedTodo);
+  } catch (error) {
+    console.log("Error updating todo:", error);
+    res.status(500).json({ error: "Failed to update todo" });
+  }
+});
 
 
 app.listen(3001, ()=>{

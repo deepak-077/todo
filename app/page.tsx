@@ -30,10 +30,24 @@ export default function Home() {
   async function deleteTodos(id:number){
     try{
       await axios.delete(`http://localhost:3001/todos/${id}`)
-      fetchTodos()
+      await fetchTodos()
     }
     catch(error){
       console.log("deletion failed", error)
+    }
+  }
+
+  async function markAsDone(id:number){
+    try{
+      await axios.patch(`http://localhost:3001/todos/${id}`,{
+        done:true
+      })
+
+      // updating at front-end
+      setTodos((prev)=>prev.map((todo)=>(todo.id===id?{...todo,done:true}:todo)))
+    }
+    catch(error){
+      console.log("failed to update",error)
     }
   }
 
@@ -66,11 +80,11 @@ export default function Home() {
             <p key={item.id}>{item.title}</p>
 
             <button className="bg-lime-500 rounded-full p-2" onClick={()=>{
-              setTodos(( prev )=> prev.map((a)=>( a.id===item.id ? {...a,done:true}:a
-              )))
+              markAsDone(item.id)
             }}>Mark As Done</button>
+
             <button className="bg-red-400 rounded-full p-2" onClick={()=>{
-              setTodos(todos.filter(a=>a.id!==item.id))
+              deleteTodos(item.id)
             }}>Delete Todo</button>
           </div>
           
